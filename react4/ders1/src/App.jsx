@@ -1,29 +1,8 @@
 import { useState, useEffect } from "react";
-import {
-  Container,
-  Navbar,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavbarToggler,
-  Collapse,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  ListGroupItem,
-  Col,
-  Card,
-  CardImg,
-  CardBody,
-  CardTitle,
-  CardText,
-  Button,
-  ListGroup,
-  CardGroup,
-  Row,
-} from "reactstrap";
+import Ust from "./components/Ust";
+import Kategoriler from "./components/Kategoriler";
+import Urunler from "./components/Urunler";
+import { Container, Col, Row } from "reactstrap";
 function App() {
   const [kategoriler, setkategoriler] = useState([]);
   const [urunler, seturunler] = useState([]);
@@ -92,82 +71,27 @@ function App() {
   };
   return (
     <Container>
-      <Navbar color="light" light expand="md">
-        <NavbarBrand href="/">Kodusta</NavbarBrand>
-        <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={isOpen} navbar>
-          <Nav className="ml-auto" navbar>
-            <NavItem>
-              <NavLink href="https://github.com/kodusta" target="_blank">
-                Kodusta
-              </NavLink>
-            </NavItem>
-            <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                Sepet - {sepet.length}
-              </DropdownToggle>
-              <DropdownMenu end>
-                {sepet.map((urun) => (
-                  <DropdownItem key={urun.urun.id}>
-                    <button
-                      style={{ cursor: "pointer", marginRight: "5px" }}
-                      onClick={() => sepetguncelle(urun.urun, "arttir")}
-                    >
-                      +
-                    </button>{" "}
-                    {urun.urun.productName}- {urun.adet}{" "}
-                    <button
-                      style={{ cursor: "pointer", marginLeft: "5px" }}
-                      onClick={() => sepetguncelle(urun.urun, "azalt")}
-                    >
-                      -
-                    </button>
-                  </DropdownItem>
-                ))}
-                <DropdownItem divider />
-                <DropdownItem onClick={sepetsifirla}>Sıfırla</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-          </Nav>
-        </Collapse>
-      </Navbar>
+      <Ust
+        sepet={sepet}
+        toggle={toggle}
+        isOpen={isOpen}
+        sepetguncelle={sepetguncelle}
+        sepetsifirla={sepetsifirla}
+      />
       <Row>
         <Col xs="3">
-          <ListGroup>
-            {kategoriler.map((kategori) => (
-              <ListGroupItem
-                active={kategori.categoryName === secilikategori}
-                key={kategori.id}
-                onClick={() => kategoridegistir(kategori)}
-              >
-                {kategori.categoryName}
-              </ListGroupItem>
-            ))}
-          </ListGroup>
+          <Kategoriler
+            kategoriler={kategoriler}
+            kategoridegistir={kategoridegistir}
+            secilikategori={secilikategori}
+          />
         </Col>
         <Col xs="9">
-          <h2>{secilikategori}</h2>
-          <CardGroup>
-            {urunler.map((urun) => (
-              <Col xs="4" key={urun.id}>
-                <Card style={{ marginLeft: "10px", marginRight: "10px" }}>
-                  <CardImg
-                    top
-                    width="100%"
-                    src={urun.image}
-                    alt={urun.productName}
-                  />
-                  <CardBody>
-                    <CardTitle>{urun.productName}</CardTitle>
-                    <CardText>{urun.desc}</CardText>
-                    <Button onClick={() => sepeteekle(urun)}>
-                      Sepete Ekle
-                    </Button>
-                  </CardBody>
-                </Card>
-              </Col>
-            ))}
-          </CardGroup>
+          <Urunler
+            sepeteekle={sepeteekle}
+            urunler={urunler}
+            secilikategori={secilikategori}
+          />
         </Col>
       </Row>
     </Container>
